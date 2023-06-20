@@ -1,16 +1,16 @@
 export const waait = (): Promise<void> =>
-  new Promise((res) => setTimeout(res, Math.random() * 800))
+  new Promise((res) => setTimeout(res, Math.random() * 800));
 
 // colors
 const generateRandomColor = (): string => {
-  const existingBudgetLength = fetchData('budgets')?.length ?? 0
-  return `${existingBudgetLength * 34} 65% 50%`
-}
+  const existingBudgetLength = fetchData("budgets")?.length ?? 0;
+  return `${existingBudgetLength * 34} 65% 50%`;
+};
 
 // Local storage
 export const fetchData = (key: string): any => {
-  return JSON.parse(localStorage.getItem(key) || 'null')
-}
+  return JSON.parse(localStorage.getItem(key) || "null");
+};
 
 // Get all items from local storage
 export const getAllMatchingItems = ({
@@ -18,31 +18,37 @@ export const getAllMatchingItems = ({
   key,
   value,
 }: {
-  category: string
-  key: string
-  value: any
+  category: string;
+  key: string;
+  value: any;
 }): any[] => {
-  const data = fetchData(category) ?? []
-  return data.filter((item: any) => item[key] === value)
-}
+  const data = fetchData(category) ?? [];
+  return data.filter((item: any) => item[key] === value);
+};
 
 // delete item from local storage
-export const deleteItem = ({ key, id }: { key: string; id?: string }): void => {
-  const existingData = fetchData(key)
+export const deleteItem = ({
+  key,
+  id,
+}: {
+  key: string;
+  id?: string | undefined | File;
+}): void => {
+  const existingData = fetchData(key);
   if (id) {
-    const newData = existingData.filter((item: any) => item.id !== id)
-    return localStorage.setItem(key, JSON.stringify(newData))
+    const newData = existingData.filter((item: any) => item.id !== id);
+    return localStorage.setItem(key, JSON.stringify(newData));
   }
-  return localStorage.removeItem(key)
-}
+  return localStorage.removeItem(key);
+};
 
 // create budget
 export const createBudget = ({
   name,
   amount,
 }: {
-  name: string
-  amount: number
+  name: string | File;
+  amount: number | string | File;
 }): void => {
   const newItem = {
     id: crypto.randomUUID(),
@@ -50,13 +56,13 @@ export const createBudget = ({
     createdAt: Date.now(),
     amount: +amount,
     color: generateRandomColor(),
-  }
-  const existingBudgets = fetchData('budgets') ?? []
+  };
+  const existingBudgets = fetchData("budgets") ?? [];
   return localStorage.setItem(
-    'budgets',
+    "budgets",
     JSON.stringify([...existingBudgets, newItem])
-  )
-}
+  );
+};
 
 // create expense
 export const createExpense = ({
@@ -64,9 +70,9 @@ export const createExpense = ({
   amount,
   budgetId,
 }: {
-  name: string
-  amount: number
-  budgetId: string
+  name: string | File;
+  amount: number | string | File;
+  budgetId: string | string | File;
 }): void => {
   const newItem = {
     id: crypto.randomUUID(),
@@ -74,43 +80,43 @@ export const createExpense = ({
     createdAt: Date.now(),
     amount: +amount,
     budgetId: budgetId,
-  }
-  const existingExpenses = fetchData('expenses') ?? []
+  };
+  const existingExpenses = fetchData("expenses") ?? [];
   return localStorage.setItem(
-    'expenses',
+    "expenses",
     JSON.stringify([...existingExpenses, newItem])
-  )
-}
+  );
+};
 
 // total spent by budget
 export const calculateSpentByBudget = (budgetId: string): number => {
-  const expenses = fetchData('expenses') ?? []
+  const expenses = fetchData("expenses") ?? [];
   const budgetSpent = expenses.reduce((acc: number, expense: any) => {
     // check if expense.id === budgetId I passed in
-    if (expense.budgetId !== budgetId) return acc
+    if (expense.budgetId !== budgetId) return acc;
 
     // add the current amount to my total
-    return (acc += expense.amount)
-  }, 0)
-  return budgetSpent
-}
+    return (acc += expense.amount);
+  }, 0);
+  return budgetSpent;
+};
 
 // FORMATTING
 export const formatDateToLocaleString = (epoch: number): string =>
-  new Date(epoch).toLocaleDateString()
+  new Date(epoch).toLocaleDateString();
 
 // Formating percentages
 export const formatPercentage = (amt: number): string => {
   return amt.toLocaleString(undefined, {
-    style: 'percent',
+    style: "percent",
     minimumFractionDigits: 0,
-  })
-}
+  });
+};
 
 // Format currency
 export const formatCurrency = (amt: number): string => {
   return amt.toLocaleString(undefined, {
-    style: 'currency',
-    currency: 'USD',
-  })
-}
+    style: "currency",
+    currency: "USD",
+  });
+};
