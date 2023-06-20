@@ -1,43 +1,43 @@
 // RRD imports
-import { Link, useFetcher } from 'react-router-dom'
+import { Link, useFetcher } from "react-router-dom";
 
 // Library import
-import { TrashIcon } from '@heroicons/react/24/solid'
+import { TrashIcon } from "@heroicons/react/24/solid";
 
 // Helper imports
 import {
   formatCurrency,
   formatDateToLocaleString,
   getAllMatchingItems,
-} from '../helpers'
+} from "../helpers";
 
-interface Expense {
-  budgetId: string
-  name: string
-  amount: number
-  createdAt: number
-  id: string
+export interface Expense {
+  budgetId: string;
+  name: string;
+  amount: number;
+  createdAt: number;
+  id: string;
 }
 
 interface Budget {
-  id: string
-  name: string
-  color: string
+  id: string;
+  name: string;
+  color: string;
 }
 
 interface ExpenseItemProps {
-  expense: Expense
-  showBudget: boolean
+  expense: Expense;
+  showBudget: boolean;
 }
 
 const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense, showBudget }) => {
-  const fetcher = useFetcher()
+  const fetcher = useFetcher();
 
   const budget = getAllMatchingItems({
-    category: 'budgets',
-    key: 'id',
+    category: "budgets",
+    key: "id",
     value: expense.budgetId,
-  })[0] as Budget
+  })[0] as Budget;
 
   return (
     <>
@@ -50,7 +50,7 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense, showBudget }) => {
             to={`/budget/${budget.id}`}
             style={
               {
-                '--accent': budget.color,
+                "--accent": budget.color,
               } as React.CSSProperties
             }
           >
@@ -72,7 +72,7 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense, showBudget }) => {
         </fetcher.Form>
       </td>
     </>
-  )
-}
+  );
+};
 
-export default ExpenseItem
+export default ExpenseItem;

@@ -1,41 +1,42 @@
 // RRD imports
-import { Form, Link } from 'react-router-dom'
+import { Form, Link } from "react-router-dom";
 
 // Library imports
-import { BanknotesIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { BanknotesIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 // Helper functions
 import {
   calculateSpentByBudget,
   formatCurrency,
   formatPercentage,
-} from '../helpers'
+} from "../helpers";
 
-interface Budget {
-  id: string
-  name: string
-  amount: number
-  color: string
+export interface Budget {
+  id: string;
+  name: string;
+  amount: number;
+  color: string;
+  createdAt: number;
 }
 
 interface BudgetItemProps {
-  budget: Budget
-  showDelete?: boolean
+  budget: Budget;
+  showDelete?: boolean;
 }
 
 const BudgetItem: React.FC<BudgetItemProps> = ({
   budget,
   showDelete = false,
 }) => {
-  const { id, name, amount, color } = budget
-  const spent = calculateSpentByBudget(id)
+  const { id, name, amount, color } = budget;
+  const spent = calculateSpentByBudget(id);
 
   return (
     <div
       className="budget"
       style={
         {
-          '--accent': color,
+          "--accent": color,
         } as React.CSSProperties
       }
     >
@@ -58,10 +59,10 @@ const BudgetItem: React.FC<BudgetItemProps> = ({
             onSubmit={(event) => {
               if (
                 !confirm(
-                  'Are you sure you want to permanently delete this budget?'
+                  "Are you sure you want to permanently delete this budget?"
                 )
               ) {
-                event.preventDefault()
+                event.preventDefault();
               }
             }}
           >
@@ -80,7 +81,7 @@ const BudgetItem: React.FC<BudgetItemProps> = ({
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default BudgetItem
+export default BudgetItem;
