@@ -1,24 +1,71 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+// Library
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Main from "./layouts/Main";
+
+// Layouts
+import Main, { mainLoader } from "./layouts/Main";
+
+// Actions
+import { logoutAction } from "./actions/logout";
+import { deleteBudget } from "./actions/deleteBudget";
+
+// Routes
+import Dashboard, { dashboardAction, dashboardLoader } from "./pages/Dashboard";
 import Error from "./pages/Error";
-import Dashboard from "./pages/Dashboard";
-import BudgetPage from "./pages/BudgetPage";
-import ExpensesPage from "./pages/ExpensesPage";
+import BudgetPage, { budgetAction, budgetLoader } from "./pages/BudgetPage";
+import ExpensesPage, {
+  expensesAction,
+  expensesLoader,
+} from "./pages/ExpensesPage";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Main />,
+    loader: mainLoader,
+    errorElement: <Error />,
+    children: [
+      {
+        index: true,
+        element: <Dashboard />,
+        loader: dashboardLoader,
+        action: dashboardAction,
+        errorElement: <Error />,
+      },
+      {
+        path: "budget/:id",
+        element: <BudgetPage />,
+        loader: budgetLoader,
+        action: budgetAction,
+        errorElement: <Error />,
+        children: [
+          {
+            path: "delete",
+            action: deleteBudget,
+          },
+        ],
+      },
+      {
+        path: "expenses",
+        element: <ExpensesPage />,
+        loader: expensesLoader,
+        action: expensesAction,
+        errorElement: <Error />,
+      },
+      {
+        path: "logout",
+        action: logoutAction,
+      },
+    ],
+  },
+]);
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/" element={<Dashboard />} index />
-          <Route path="/budget/:id" element={<BudgetPage />} />
-          <Route path="/expenses" element={<ExpensesPage />} />
-          <Route path="*" element={<Error />} />
-        </Routes>
-      </BrowserRouter>
+      <RouterProvider router={router} />
       <ToastContainer />
     </div>
   );
